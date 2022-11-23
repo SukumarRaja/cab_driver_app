@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "969651379359",
+    "project_id": "shreemcabs-5d1c4",
+    "storage_bucket": "shreemcabs-5d1c4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:969651379359:android:a3879462a90d183ecd56aa",
+        "android_client_info": {
+          "package_name": "hashseven.com.driver"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzHshUrWZiyQ_Sw180besC3pfzrQY8Ev0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
