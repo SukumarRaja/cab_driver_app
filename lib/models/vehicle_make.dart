@@ -3,51 +3,63 @@ List vehicleMake = [
     "id": 1,
     "brand": "Acura",
     "models": [
-      "2.2CL",
-      "2.3CL",
-      "3.0CL",
-      "3.2CL",
-      "ILX",
-      "Integra",
-      "Legend",
-      "MDX",
-      "NSX",
-      "RDX",
-      "3.5 RL",
-      "RL",
-      "RSX",
-      "SLX",
-      "2.5TL",
-      "3.2TL",
-      "TL",
-      "TSX",
-      "Vigor",
-      "ZDX"
+      {"id": 1, "name": "2.2CL"},
+      {"id": 2, "name": "2.3CL"},
+      {"id": 3, "name": "3.0CL"},
+      {"id": 4, "name": "3.2CL"},
+      {"id": 5, "name": "ILX"},
+      {"id": 6, "name": "Integra"},
+      {"id": 7, "name": "Legend"},
+      {"id": 8, "name": "MDX"},
+      {"id": 9, "name": "NSX"},
+      {"id": 10, "name": "RDX"},
+      {"id": 11, "name": "3.5 RL"},
+      {"id": 12, "name": "RL"},
+      {"id": 13, "name": "RSX"},
+      {"id": 14, "name": "SLX"},
+      {"id": 15, "name": "2.5TL"},
+      {"id": 16, "name": "3.2TL"},
+      {"id": 17, "name": "TL"},
+      {"id": 18, "name": "TSX"},
+      {"id": 19, "name": "Vigor"},
+      {"id": 20, "name": "ZDX"}
     ]
   },
   {
     "id": 2,
     "brand": "Alfa Romeo",
-    "models": ["164", "8C Competizione", "GTV-6", "Milano", "Spider"]
+    "models": [
+      {"id": 1, "name": "164"},
+      {"id": 2, "name": "8C Competizione"},
+      {"id": 3, "name": "GTV-6"},
+      {"id": 4, "name": "Milano"},
+      {"id": 5, "name": "Spider"}
+    ]
   },
   {
     "id": 3,
     "brand": "AMC",
-    "models": ["Alliance", "Concord", "Eagle", "Encore", "Spirit"]
+    "models": [
+      {"id": 1, "name": "Alliance"},
+      {"id": 2, "name": "Concord"},
+      {"id": 3, "name": "Eagle"},
+      {"id": 4, "name": "Encore"},
+      {"id": 5, "name": "Spirit"}
+    ]
   },
   {
     "id": 4,
     "brand": "Aston Martin",
     "models": [
-      "DB7",
-      "DB9",
-      "DBS",
-      "Lagonda",
-      "Rapide",
-      "V12 Vantage",
-      "V8 Vantage",
-      "Vanquish",
-      "Virage"
+      {"id": 1, "name": "DB7"},
+      {"id": 2, "name": "DB9"},
+      {"id": 3, "name": "DBS"},
+      {"id": 4, "name": "Lagonda"},
+      {"id": 5, "name": "Rapide"},
+      {"id": 6, "name": "V12 Vantage"},
+      {"id": 7, "name": "V8 Vantage"},
+      {"id": 8, "name": "Vanquish"},
+      {"id": 9, "name": "Virage"}
     ]
   },
   {
@@ -356,12 +368,19 @@ List vehicleMake = [
   {
     "id": 13,
     "brand": "Daewoo",
-    "models": ["Lanos", "Leganza", "Nubira"]
+    "models": [
+      {"id": 1, "name": "Lanos"},
+      {"id": 2, "name": "Leganza"},
+      {"id": 3, "name": "Nubira"}
+    ]
   },
   {
     "id": 14,
     "brand": "Daihatsu",
-    "models": ["Charade", "Rocky"]
+    "models": [
+      {"id": 1, "name": "Charade"},
+      {"id": 2, "name": "Rocky"}
+    ]
   },
   {
     "id": 15,
