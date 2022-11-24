@@ -8,6 +8,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:tagyourtaxi_driver/translation/translation.dart';
 import 'package:tagyourtaxi_driver/widgets/widgets.dart';
 
+import '../../models/vehicle_type.dart';
+
 class VehicleType extends StatefulWidget {
   const VehicleType({Key? key}) : super(key: key);
 
@@ -114,7 +116,7 @@ class _VehicleTypeState extends State<VehicleType> {
                                                             media.width * 0.133,
                                                         height:
                                                             media.width * 0.133,
-                                                        child: Image.network(
+                                                        child: Image.asset(
                                                           vehicleType[i]
                                                               ['icon'],
                                                           fit: BoxFit.contain,

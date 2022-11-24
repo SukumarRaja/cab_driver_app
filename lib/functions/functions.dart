@@ -156,6 +156,7 @@ getlangid() async {
 //language code
 var choosenLanguage = '';
 var languageDirection = '';
+bool isDemo = false;
 
 List languagesCode = [
   {'name': 'Amharic', 'code': 'am'},
@@ -359,6 +360,7 @@ bool phoneAuthCheck = false;
 dynamic credentials;
 
 phoneAuth(String phone) async {
+  print("phone number $phone");
   try {
     credentials = null;
     await FirebaseAuth.instance.verifyPhoneNumber(
@@ -437,7 +439,8 @@ getLocalData() async {
 
 //get service locations
 
-List serviceLocations = [];
+
+
 
 getServiceLocation() async {
   dynamic res;
@@ -447,7 +450,7 @@ getServiceLocation() async {
     );
 
     if (response.statusCode == 200) {
-      serviceLocations = jsonDecode(response.body)['data'];
+      // serviceLocations = jsonDecode(response.body)['data'];
       res = 'success';
     } else {
       debugPrint(response.body);
@@ -463,7 +466,7 @@ getServiceLocation() async {
 
 //get vehicle type
 
-List vehicleType = [];
+
 
 getvehicleType() async {
   dynamic res;
@@ -473,7 +476,7 @@ getvehicleType() async {
     );
 
     if (response.statusCode == 200) {
-      vehicleType = jsonDecode(response.body)['data'];
+      // vehicleType = jsonDecode(response.body)['data'];
       res = 'success';
     } else {
       debugPrint(response.body);
@@ -490,7 +493,7 @@ getvehicleType() async {
 
 //get vehicle make
 
-List vehicleMake = [];
+
 
 getVehicleMake() async {
   dynamic res;
@@ -500,7 +503,7 @@ getVehicleMake() async {
     );
 
     if (response.statusCode == 200) {
-      vehicleMake = jsonDecode(response.body)['data'];
+      // vehicleMake = jsonDecode(response.body)['data'];
       res = 'success';
     } else {
       debugPrint(response.body);
@@ -515,8 +518,9 @@ getVehicleMake() async {
 }
 
 //get vehicle model
+dynamic selectedVechileMake;
+List vehicleModel =[];
 
-List vehicleModel = [];
 
 getVehicleModel() async {
   dynamic res;
@@ -526,7 +530,7 @@ getVehicleModel() async {
     );
 
     if (response.statusCode == 200) {
-      vehicleModel = jsonDecode(response.body)['data'];
+      // vehicleModel = jsonDecode(response.body)['data'];
       res = 'success';
     } else {
       debugPrint(response.body);
@@ -646,7 +650,9 @@ addDriver() async {
 //register owner
 
 registerOwner() async {
+  print("owner reg");
   bearerToken.clear();
+  print("fcm is $fcm");
   dynamic result;
   try {
     final response =
@@ -664,8 +670,8 @@ registerOwner() async {
       "tax_number": taxNumber,
       "company_name": companyName,
       "device_token": fcm,
-      "country": countries[phcode]['dial_code'],
-      "service_location_id": ownerServiceLocation,
+      "country": "+91",
+      "service_location_id": ownerServiceLocation.toString(),
       "login_by": (platform == TargetPlatform.android) ? 'android' : 'ios',
       'lang': choosenLanguage,
     });
@@ -694,6 +700,8 @@ registerOwner() async {
       result = jsonDecode(respon.body)['message'];
     }
   } catch (e) {
+    print("response $e");
+
     if (e is SocketException) {
       internet = false;
       result = 'no internet';
@@ -910,11 +918,19 @@ getFleetDocumentsNeeded(fleetid) async {
 //call firebase otp
 
 otpCall() async {
+  print("otp initi");
   dynamic result;
   try {
     var otp = await FirebaseDatabase.instance.ref().child('call_FB_OTP').get();
+    print("otp from firebase ${otp.value!.hashCode}");
+
     result = otp;
   } catch (e) {
+    print("otp call failed $result");
+    if (result == null) {
+      var dymmy = await FirebaseDatabase.instance;
+      print("buk $dymmy");
+    }
     if (e is SocketException) {
       internet = false;
       result = 'no Internet';
@@ -1532,7 +1548,6 @@ requestReject() async {
     }
   }
 }
-
 
 //sound
 

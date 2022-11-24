@@ -10,6 +10,10 @@ import 'package:tagyourtaxi_driver/styles/styles.dart';
 import 'package:tagyourtaxi_driver/translation/translation.dart';
 import 'package:tagyourtaxi_driver/widgets/widgets.dart';
 
+import '../../models/service.dart';
+import '../../models/vehicle_make.dart';
+import '../../models/vehicle_type.dart';
+
 class VehicleColor extends StatefulWidget {
   const VehicleColor({Key? key}) : super(key: key);
 

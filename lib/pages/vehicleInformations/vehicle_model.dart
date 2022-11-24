@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tagyourtaxi_driver/functions/functions.dart';
+import 'package:tagyourtaxi_driver/models/vehicle_make.dart';
 import 'package:tagyourtaxi_driver/pages/loadingPage/loading.dart';
 import 'package:tagyourtaxi_driver/pages/noInternet/nointernet.dart';
 import 'package:tagyourtaxi_driver/pages/vehicleInformations/vehicle_year.dart';
@@ -41,6 +42,7 @@ class _VehicleModelState extends State<VehicleModel> {
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
+    print("vehicle models is $vehicleModel");
     return Material(
       child: Directionality(
         textDirection: (languageDirection == 'rtl')
@@ -90,48 +92,45 @@ class _VehicleModelState extends State<VehicleModel> {
                       ? Expanded(
                           child: SingleChildScrollView(
                           physics: const BouncingScrollPhysics(),
-                          child: Column(
-                            children: vehicleModel
-                                .asMap()
-                                .map((i, value) => MapEntry(
-                                    i,
-                                    Container(
-                                      padding: const EdgeInsets.only(
-                                          top: 10, bottom: 10),
-                                      width: media.width * 1,
-                                      alignment: Alignment.centerLeft,
-                                      child: InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            vehicleModelId =
-                                                vehicleModel[i]['id'];
-                                          });
-                                        },
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              vehicleModel[i]['name'],
-                                              style: GoogleFonts.roboto(
-                                                  fontSize:
-                                                      media.width * twenty,
-                                                  color: textColor),
-                                            ),
-                                            (vehicleModelId ==
-                                                    vehicleModel[i]['id'])
-                                                ? Icon(
-                                                    Icons.done,
-                                                    color: buttonColor,
-                                                  )
-                                                : Container()
-                                          ],
-                                        ),
-                                      ),
-                                    )))
-                                .values
-                                .toList(),
-                          ),
+                          child: ListView.builder(
+                              itemCount: vehicleModel.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context,int index){
+                            return Container(
+                              padding: const EdgeInsets.only(
+                                  top: 10, bottom: 10),
+                              width: media.width * 1,
+                              alignment: Alignment.centerLeft,
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    vehicleModelId =
+                                    vehicleModel[index]['id'];
+                                  });
+                                },
+                                child: Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      vehicleModel[index]['name'],
+                                      style: GoogleFonts.roboto(
+                                          fontSize:
+                                          media.width * twenty,
+                                          color: textColor),
+                                    ),
+                                    (vehicleModelId ==
+                                        vehicleModel[index]['id'])
+                                        ? Icon(
+                                      Icons.done,
+                                      color: buttonColor,
+                                    )
+                                        : Container()
+                                  ],
+                                ),
+                              ),
+                            );
+                          })
                         ))
                       : Container(),
                   (vehicleModelId != '')

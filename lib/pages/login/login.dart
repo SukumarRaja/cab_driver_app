@@ -6,6 +6,7 @@ import 'package:tagyourtaxi_driver/pages/noInternet/nointernet.dart';
 import 'package:tagyourtaxi_driver/translation/translation.dart';
 import '../../styles/styles.dart';
 import '../../functions/functions.dart';
+import '../../widgets/intl_phone_field.dart';
 import '../../widgets/widgets.dart';
 
 class Login extends StatefulWidget {
@@ -62,8 +63,15 @@ class _LoginState extends State<Login> {
             : TextDirection.ltr,
         child: Stack(
           children: [
-            (countries.isNotEmpty)
+            (isDemo)
                 ? Container(
+                    height: media.height * 1,
+                    width: media.width * 1,
+                    color: page,
+                    child: const Center(
+                        child: Text("Please Enable Api Functions")),
+                  )
+                : Container(
                     color: page,
                     padding: EdgeInsets.only(
                         top: MediaQuery.of(context).padding.top,
@@ -85,260 +93,275 @@ class _LoginState extends State<Login> {
                         SizedBox(
                           height: media.height * 0.159,
                         ),
-                        Container(
-                          padding: const EdgeInsets.only(bottom: 5),
-                          height: 55,
-                          width: media.width * 1 - (media.width * 0.08 * 2),
-                          decoration: BoxDecoration(
-                              border:
-                                  Border(bottom: BorderSide(color: underline))),
-                          child: Row(
-                            children: [
-                              InkWell(
-                                onTap: () async {
-                                  if (countries.isNotEmpty) {
-                                    //dialod box for select country for dial code
-                                    await showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          var searchVal = '';
-                                          return AlertDialog(
-                                            insetPadding:
-                                                const EdgeInsets.all(10),
-                                            content: StatefulBuilder(
-                                                builder: (context, setState) {
-                                              return Container(
-                                                width: media.width * 0.9,
-                                                color: Colors.white,
-                                                child: Directionality(
-                                                  textDirection:
-                                                      (languageDirection ==
-                                                              'rtl')
-                                                          ? TextDirection.rtl
-                                                          : TextDirection.ltr,
-                                                  child: Column(
-                                                    children: [
-                                                      Container(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 20,
-                                                                right: 20),
-                                                        height: 40,
-                                                        width:
-                                                            media.width * 0.9,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20),
-                                                            border: Border.all(
-                                                                color:
-                                                                    Colors.grey,
-                                                                width: 1.5)),
-                                                        child: TextField(
-                                                          decoration: InputDecoration(
-                                                              contentPadding: (languageDirection ==
-                                                                      'rtl')
-                                                                  ? EdgeInsets.only(
-                                                                      bottom: media.width *
-                                                                          0.035)
-                                                                  : EdgeInsets.only(
-                                                                      bottom: media.width *
-                                                                          0.04),
-                                                              border: InputBorder
-                                                                  .none,
-                                                              hintText:
-                                                                  languages[choosenLanguage]
-                                                                      [
-                                                                      'text_search'],
-                                                              hintStyle: GoogleFonts.roboto(
-                                                                  fontSize: media
-                                                                          .width *
-                                                                      sixteen)),
-                                                          onChanged: (val) {
-                                                            setState(() {
-                                                              searchVal = val;
-                                                            });
-                                                          },
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                          height: 20),
-                                                      Expanded(
-                                                        child:
-                                                            SingleChildScrollView(
-                                                          child: Column(
-                                                            children: countries
-                                                                .asMap()
-                                                                .map(
-                                                                    (i, value) {
-                                                                  return MapEntry(
-                                                                      i,
-                                                                      SizedBox(
-                                                                        width: media.width *
-                                                                            0.9,
-                                                                        child: (searchVal == '' &&
-                                                                                countries[i]['flag'] != null)
-                                                                            ? InkWell(
-                                                                                onTap: () {
-                                                                                  setState(() {
-                                                                                    phcode = i;
-                                                                                  });
-                                                                                  Navigator.pop(context);
-                                                                                },
-                                                                                child: Container(
-                                                                                  padding: const EdgeInsets.only(top: 10, bottom: 10),
-                                                                                  color: Colors.white,
-                                                                                  child: Row(
-                                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                    children: [
-                                                                                      Row(
-                                                                                        children: [
-                                                                                          Image.network(countries[i]['flag']),
-                                                                                          SizedBox(
-                                                                                            width: media.width * 0.02,
-                                                                                          ),
-                                                                                          SizedBox(
-                                                                                              width: media.width * 0.4,
-                                                                                              child: Text(
-                                                                                                countries[i]['name'],
-                                                                                                style: GoogleFonts.roboto(fontSize: media.width * sixteen),
-                                                                                              )),
-                                                                                        ],
-                                                                                      ),
-                                                                                      Text(
-                                                                                        countries[i]['dial_code'],
-                                                                                        style: GoogleFonts.roboto(fontSize: media.width * sixteen),
-                                                                                      )
-                                                                                    ],
-                                                                                  ),
-                                                                                ))
-                                                                            : (countries[i]['flag'] != null && countries[i]['name'].toLowerCase().contains(searchVal.toLowerCase()))
-                                                                                ? InkWell(
-                                                                                    onTap: () {
-                                                                                      setState(() {
-                                                                                        phcode = i;
-                                                                                      });
-                                                                                      Navigator.pop(context);
-                                                                                    },
-                                                                                    child: Container(
-                                                                                      padding: const EdgeInsets.only(top: 10, bottom: 10),
-                                                                                      color: Colors.white,
-                                                                                      child: Row(
-                                                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                        children: [
-                                                                                          Row(
-                                                                                            children: [
-                                                                                              Image.network(countries[i]['flag']),
-                                                                                              SizedBox(
-                                                                                                width: media.width * 0.02,
-                                                                                              ),
-                                                                                              SizedBox(
-                                                                                                  width: media.width * 0.4,
-                                                                                                  child: Text(
-                                                                                                    countries[i]['name'],
-                                                                                                    style: GoogleFonts.roboto(fontSize: media.width * sixteen),
-                                                                                                  )),
-                                                                                            ],
-                                                                                          ),
-                                                                                          Text(
-                                                                                            countries[i]['dial_code'],
-                                                                                            style: GoogleFonts.roboto(fontSize: media.width * sixteen),
-                                                                                          )
-                                                                                        ],
-                                                                                      ),
-                                                                                    ))
-                                                                                : Container(),
-                                                                      ));
-                                                                })
-                                                                .values
-                                                                .toList(),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              );
-                                            }),
-                                          );
-                                        });
-                                  } else {
-                                    getCountryCode();
-                                  }
-                                  setState(() {});
-                                },
-                                child: Container(
-                                  height: 50,
-                                  alignment: Alignment.center,
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Image.network(countries[phcode]['flag']),
-                                      SizedBox(
-                                        width: media.width * 0.02,
-                                      ),
-                                      Text(
-                                        countries[phcode]['dial_code']
-                                            .toString(),
-                                        style: GoogleFonts.roboto(
-                                            fontSize: media.width * sixteen,
-                                            color: textColor),
-                                      ),
-                                      const SizedBox(
-                                        width: 2,
-                                      ),
-                                      const Icon(Icons.keyboard_arrow_down)
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 4),
-                              Container(
-                                width: 1,
-                                height: media.width * 0.0693,
-                                color: buttonColor,
-                              ),
-                              const SizedBox(width: 10),
-                              Container(
-                                height: 50,
-                                alignment: Alignment.center,
-                                width: media.width * 0.5,
-                                child: TextFormField(
-                                  controller: controller,
-                                  onChanged: (val) {
-                                    setState(() {
-                                      phnumber = controller.text;
-                                    });
-                                    if (controller.text.length ==
-                                        countries[phcode]['dial_max_length']) {
-                                      FocusManager.instance.primaryFocus
-                                          ?.unfocus();
-                                    }
-                                  },
-                                  maxLength: countries[phcode]
-                                      ['dial_max_length'],
-                                  style: GoogleFonts.roboto(
-                                      fontSize: media.width * sixteen,
-                                      color: textColor,
-                                      letterSpacing: 1),
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                    hintText: languages[choosenLanguage]
-                                        ['text_phone_number'],
-                                    counterText: '',
-                                    hintStyle: GoogleFonts.roboto(
-                                        fontSize: media.width * sixteen,
-                                        color: textColor.withOpacity(0.7)),
-                                    border: InputBorder.none,
-                                    enabledBorder: InputBorder.none,
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
+                        // Container(
+                        //   padding: const EdgeInsets.only(bottom: 5),
+                        //   height: 55,
+                        //   width: media.width * 1 - (media.width * 0.08 * 2),
+                        //   decoration: BoxDecoration(
+                        //       border:
+                        //           Border(bottom: BorderSide(color: underline))),
+                        //   child: Row(
+                        //     children: [
+                        //       InkWell(
+                        //         onTap: () async {
+                        //           if (countries.isNotEmpty) {
+                        //             //dialod box for select country for dial code
+                        //             await showDialog(
+                        //                 context: context,
+                        //                 builder: (context) {
+                        //                   var searchVal = '';
+                        //                   return AlertDialog(
+                        //                     insetPadding:
+                        //                         const EdgeInsets.all(10),
+                        //                     content: StatefulBuilder(
+                        //                         builder: (context, setState) {
+                        //                       return Container(
+                        //                         width: media.width * 0.9,
+                        //                         color: Colors.white,
+                        //                         child: Directionality(
+                        //                           textDirection:
+                        //                               (languageDirection ==
+                        //                                       'rtl')
+                        //                                   ? TextDirection.rtl
+                        //                                   : TextDirection.ltr,
+                        //                           child: Column(
+                        //                             children: [
+                        //                               Container(
+                        //                                 padding:
+                        //                                     const EdgeInsets
+                        //                                             .only(
+                        //                                         left: 20,
+                        //                                         right: 20),
+                        //                                 height: 40,
+                        //                                 width:
+                        //                                     media.width * 0.9,
+                        //                                 decoration: BoxDecoration(
+                        //                                     borderRadius:
+                        //                                         BorderRadius
+                        //                                             .circular(
+                        //                                                 20),
+                        //                                     border: Border.all(
+                        //                                         color:
+                        //                                             Colors.grey,
+                        //                                         width: 1.5)),
+                        //                                 child: TextField(
+                        //                                   decoration: InputDecoration(
+                        //                                       contentPadding: (languageDirection ==
+                        //                                               'rtl')
+                        //                                           ? EdgeInsets.only(
+                        //                                               bottom: media.width *
+                        //                                                   0.035)
+                        //                                           : EdgeInsets.only(
+                        //                                               bottom: media.width *
+                        //                                                   0.04),
+                        //                                       border: InputBorder
+                        //                                           .none,
+                        //                                       hintText:
+                        //                                           languages[choosenLanguage]
+                        //                                               [
+                        //                                               'text_search'],
+                        //                                       hintStyle: GoogleFonts.roboto(
+                        //                                           fontSize: media
+                        //                                                   .width *
+                        //                                               sixteen)),
+                        //                                   onChanged: (val) {
+                        //                                     setState(() {
+                        //                                       searchVal = val;
+                        //                                     });
+                        //                                   },
+                        //                                 ),
+                        //                               ),
+                        //                               const SizedBox(
+                        //                                   height: 20),
+                        //                               Expanded(
+                        //                                 child:
+                        //                                     SingleChildScrollView(
+                        //                                   child: Column(
+                        //                                     children: countries
+                        //                                         .asMap()
+                        //                                         .map(
+                        //                                             (i, value) {
+                        //                                           return MapEntry(
+                        //                                               i,
+                        //                                               SizedBox(
+                        //                                                 width: media.width *
+                        //                                                     0.9,
+                        //                                                 child: (searchVal == '' &&
+                        //                                                         countries[i]['flag'] != null)
+                        //                                                     ? InkWell(
+                        //                                                         onTap: () {
+                        //                                                           setState(() {
+                        //                                                             phcode = i;
+                        //                                                           });
+                        //                                                           Navigator.pop(context);
+                        //                                                         },
+                        //                                                         child: Container(
+                        //                                                           padding: const EdgeInsets.only(top: 10, bottom: 10),
+                        //                                                           color: Colors.white,
+                        //                                                           child: Row(
+                        //                                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //                                                             children: [
+                        //                                                               Row(
+                        //                                                                 children: [
+                        //                                                                   Image.network(countries[i]['flag']),
+                        //                                                                   SizedBox(
+                        //                                                                     width: media.width * 0.02,
+                        //                                                                   ),
+                        //                                                                   SizedBox(
+                        //                                                                       width: media.width * 0.4,
+                        //                                                                       child: Text(
+                        //                                                                         countries[i]['name'],
+                        //                                                                         style: GoogleFonts.roboto(fontSize: media.width * sixteen),
+                        //                                                                       )),
+                        //                                                                 ],
+                        //                                                               ),
+                        //                                                               Text(
+                        //                                                                 countries[i]['dial_code'],
+                        //                                                                 style: GoogleFonts.roboto(fontSize: media.width * sixteen),
+                        //                                                               )
+                        //                                                             ],
+                        //                                                           ),
+                        //                                                         ))
+                        //                                                     : (countries[i]['flag'] != null && countries[i]['name'].toLowerCase().contains(searchVal.toLowerCase()))
+                        //                                                         ? InkWell(
+                        //                                                             onTap: () {
+                        //                                                               setState(() {
+                        //                                                                 phcode = i;
+                        //                                                               });
+                        //                                                               Navigator.pop(context);
+                        //                                                             },
+                        //                                                             child: Container(
+                        //                                                               padding: const EdgeInsets.only(top: 10, bottom: 10),
+                        //                                                               color: Colors.white,
+                        //                                                               child: Row(
+                        //                                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //                                                                 children: [
+                        //                                                                   Row(
+                        //                                                                     children: [
+                        //                                                                       Image.network(countries[i]['flag']),
+                        //                                                                       SizedBox(
+                        //                                                                         width: media.width * 0.02,
+                        //                                                                       ),
+                        //                                                                       SizedBox(
+                        //                                                                           width: media.width * 0.4,
+                        //                                                                           child: Text(
+                        //                                                                             countries[i]['name'],
+                        //                                                                             style: GoogleFonts.roboto(fontSize: media.width * sixteen),
+                        //                                                                           )),
+                        //                                                                     ],
+                        //                                                                   ),
+                        //                                                                   Text(
+                        //                                                                     countries[i]['dial_code'],
+                        //                                                                     style: GoogleFonts.roboto(fontSize: media.width * sixteen),
+                        //                                                                   )
+                        //                                                                 ],
+                        //                                                               ),
+                        //                                                             ))
+                        //                                                         : Container(),
+                        //                                               ));
+                        //                                         })
+                        //                                         .values
+                        //                                         .toList(),
+                        //                                   ),
+                        //                                 ),
+                        //                               ),
+                        //                             ],
+                        //                           ),
+                        //                         ),
+                        //                       );
+                        //                     }),
+                        //                   );
+                        //                 });
+                        //           } else {
+                        //             getCountryCode();
+                        //           }
+                        //           setState(() {});
+                        //         },
+                        //         child: Container(
+                        //           height: 50,
+                        //           alignment: Alignment.center,
+                        //           child: Row(
+                        //             crossAxisAlignment:
+                        //                 CrossAxisAlignment.center,
+                        //             children: [
+                        //               Image.network(countries[phcode]['flag']),
+                        //               SizedBox(
+                        //                 width: media.width * 0.02,
+                        //               ),
+                        //               Text(
+                        //                 countries[phcode]['dial_code']
+                        //                     .toString(),
+                        //                 style: GoogleFonts.roboto(
+                        //                     fontSize: media.width * sixteen,
+                        //                     color: textColor),
+                        //               ),
+                        //               const SizedBox(
+                        //                 width: 2,
+                        //               ),
+                        //               const Icon(Icons.keyboard_arrow_down)
+                        //             ],
+                        //           ),
+                        //         ),
+                        //       ),
+                        //       const SizedBox(width: 4),
+                        //       Container(
+                        //         width: 1,
+                        //         height: media.width * 0.0693,
+                        //         color: buttonColor,
+                        //       ),
+                        //       const SizedBox(width: 10),
+                        //       Container(
+                        //         height: 50,
+                        //         alignment: Alignment.center,
+                        //         width: media.width * 0.5,
+                        //         child: TextFormField(
+                        //           controller: controller,
+                        //           onChanged: (val) {
+                        //             setState(() {
+                        //               phnumber = controller.text;
+                        //             });
+                        //             if (controller.text.length ==
+                        //                 countries[phcode]['dial_max_length']) {
+                        //               FocusManager.instance.primaryFocus
+                        //                   ?.unfocus();
+                        //             }
+                        //           },
+                        //           maxLength: countries[phcode]
+                        //               ['dial_max_length'],
+                        //           style: GoogleFonts.roboto(
+                        //               fontSize: media.width * sixteen,
+                        //               color: textColor,
+                        //               letterSpacing: 1),
+                        //           keyboardType: TextInputType.number,
+                        //           decoration: InputDecoration(
+                        //             hintText: languages[choosenLanguage]
+                        //                 ['text_phone_number'],
+                        //             counterText: '',
+                        //             hintStyle: GoogleFonts.roboto(
+                        //                 fontSize: media.width * sixteen,
+                        //                 color: textColor.withOpacity(0.7)),
+                        //             border: InputBorder.none,
+                        //             enabledBorder: InputBorder.none,
+                        //           ),
+                        //         ),
+                        //       )
+                        //     ],
+                        //   ),
+                        // ),
+                        IntlPhoneField(
+                          maxLength: 10,
+                          controller: controller,
+                          initialCountryCode: "IN",
+                          validator: (data) {
+                            return null;
+                          },
+                          onChanged: (data){
+                            print("number is $data");
+                            setState(() {
+                              // phnumber = controller.text;
+                              phnumber = data;
+                            });
+                          },
                         ),
                         SizedBox(height: media.height * 0.05),
                         Row(
@@ -382,8 +405,7 @@ class _LoginState extends State<Login> {
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      openBrowser(
-                                          'terms and conditions url');
+                                      openBrowser('terms and conditions url');
                                     },
                                     child: Text(
                                       languages[choosenLanguage]['text_terms'],
@@ -400,8 +422,7 @@ class _LoginState extends State<Login> {
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      openBrowser(
-                                          'privacy policy url');
+                                      openBrowser('privacy policy url');
                                     },
                                     child: Text(
                                       languages[choosenLanguage]
@@ -419,9 +440,7 @@ class _LoginState extends State<Login> {
                         SizedBox(
                           height: media.height * 0.1,
                         ),
-                        (controller.text.length >=
-                                    countries[phcode]['dial_min_length'] &&
-                                terms == true)
+                        (controller.text.length >= 10 && terms == true)
                             ? Container(
                                 width: media.width * 1 - media.width * 0.08,
                                 alignment: Alignment.center,
@@ -434,20 +453,27 @@ class _LoginState extends State<Login> {
                                     });
                                     //check if otp is true or false
                                     var val = await otpCall();
-                                    //otp is true
-                                    if (val.value == true) {
-                                      phoneAuthCheck = true;
-                                      await phoneAuth(countries[phcode]
-                                              ['dial_code'] +
-                                          phnumber);
 
-                                      navigate();
+                                    //otp is true
+                                    if (val == null) {
+                                      print("val is $val");
+                                      setState(() {
+                                        _isLoading = false;
+                                      });
+                                    } else if (val != null) {
+                                      if (val.value == true) {
+                                        phoneAuthCheck = true;
+                                        await phoneAuth("+91$phnumber");
+
+                                        navigate();
+                                      }
+                                      //otp is false
+                                      else if (val.value == false) {
+                                        phoneAuthCheck = false;
+                                        navigate();
+                                      }
                                     }
-                                    //otp is false
-                                    else if (val.value == false) {
-                                      phoneAuthCheck = false;
-                                      navigate();
-                                    }
+
                                     setState(() {
                                       _isLoading = false;
                                     });
@@ -459,11 +485,6 @@ class _LoginState extends State<Login> {
                             : Container(),
                       ],
                     ),
-                  )
-                : Container(
-                    height: media.height * 1,
-                    width: media.width * 1,
-                    color: page,
                   ),
 
             //loader

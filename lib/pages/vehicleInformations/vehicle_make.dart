@@ -8,6 +8,8 @@ import 'package:tagyourtaxi_driver/styles/styles.dart';
 import 'package:tagyourtaxi_driver/translation/translation.dart';
 import 'package:tagyourtaxi_driver/widgets/widgets.dart';
 
+import '../../models/vehicle_make.dart';
+
 class VehicleMake extends StatefulWidget {
   const VehicleMake({Key? key}) : super(key: key);
 
@@ -107,13 +109,20 @@ class _VehicleMakeState extends State<VehicleMake> {
                                             vehicleMakeId =
                                                 vehicleMake[i]['id'];
                                           });
+                                          setState(() {
+                                            print("id is $vehicleMakeId");
+                                            vehicleModel =
+                                                vehicleMake[i]['models'];
+                                            print(
+                                                "vmodel ${vehicleMake[i]['models']}");
+                                          });
                                         },
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              vehicleMake[i]['name'],
+                                              vehicleMake[i]['brand'],
                                               style: GoogleFonts.roboto(
                                                   fontSize:
                                                       media.width * twenty,

@@ -256,7 +256,7 @@ class _GetStartedState extends State<GetStarted> {
                                         CrossAxisAlignment.center,
                                     children: [
                                       Text(
-                                        countries[phcode]['dial_code'],
+                                        "+91",
                                         style: GoogleFonts.roboto(
                                             fontSize: media.width * sixteen,
                                             color: textColor),
@@ -306,40 +306,42 @@ class _GetStartedState extends State<GetStarted> {
                                   alignment: Alignment.center,
                                   child: Button(
                                       onTap: () async {
-                                        String pattern =
-                                            r"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])*$";
-                                        RegExp regex = RegExp(pattern);
-                                        if (regex.hasMatch(emailText.text)) {
-                                          FocusManager.instance.primaryFocus
-                                              ?.unfocus();
-                                          setState(() {
-                                            verifyEmailError = '';
-                                            _loading = true;
-                                          });
-                                          var result =
-                                              await validateEmail(email);
-                                          setState(() {
-                                            _loading = false;
-                                          });
-                                          if (result == 'success') {
-                                            setState(() {
-                                              verifyEmailError = '';
-                                            });
-                                            navigate();
-                                          } else {
-                                            setState(() {
-                                              verifyEmailError =
-                                                  result.toString();
-                                            });
-                                            debugPrint('failed');
-                                          }
-                                        } else {
-                                          setState(() {
-                                            verifyEmailError =
-                                                languages[choosenLanguage]
-                                                    ['text_email_validation'];
-                                          });
-                                        }
+                                        // String pattern =
+                                        //     r"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])*$";
+                                        // RegExp regex = RegExp(pattern);
+                                        // if (regex.hasMatch(emailText.text)) {
+                                        //   FocusManager.instance.primaryFocus
+                                        //       ?.unfocus();
+                                        //   setState(() {
+                                        //     verifyEmailError = '';
+                                        //     _loading = true;
+                                        //   });
+                                        //   var result =
+                                        //       await validateEmail(email);
+                                        //   setState(() {
+                                        //     _loading = false;
+                                        //   });
+                                        //   if (result == 'success') {
+                                        //     setState(() {
+                                        //       verifyEmailError = '';
+                                        //     });
+                                        //     navigate();
+                                        //   } else {
+                                        //     setState(() {
+                                        //       verifyEmailError =
+                                        //           result.toString();
+                                        //     });
+                                        //     debugPrint('failed');
+                                        //   }
+                                        // } else {
+                                        //   setState(() {
+                                        //     verifyEmailError =
+                                        //         languages[choosenLanguage]
+                                        //             ['text_email_validation'];
+                                        //   });
+                                        // }
+
+                                        navigate();
                                       },
                                       text: languages[choosenLanguage]
                                           ['text_next']))

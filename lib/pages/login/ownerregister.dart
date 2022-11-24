@@ -14,6 +14,8 @@ import 'package:tagyourtaxi_driver/widgets/widgets.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../models/service.dart';
+
 class OwnersRegister extends StatefulWidget {
   const OwnersRegister({Key? key}) : super(key: key);
 
@@ -28,7 +30,7 @@ String companyAddress = '';
 String city = '';
 String postalCode = '';
 String taxNumber = '';
-String ownerServiceLocation = '';
+dynamic ownerServiceLocation;
 
 class _OwnersRegisterState extends State<OwnersRegister> {
   bool _loading = true;
@@ -364,8 +366,7 @@ class _OwnersRegisterState extends State<OwnersRegister> {
                                                         InkWell(
                                                           onTap: () {
                                                             ownerServiceLocation =
-                                                                serviceLocations[
-                                                                    i]['id'];
+                                                                serviceLocations[i]['id'];
                                                             _chooseLocation =
                                                                 false;
                                                             setState(() {});
@@ -433,7 +434,7 @@ class _OwnersRegisterState extends State<OwnersRegister> {
                                           CrossAxisAlignment.center,
                                       children: [
                                         Text(
-                                          countries[phcode]['dial_code'],
+                                          "+91",
                                           style: GoogleFonts.roboto(
                                               fontSize: media.width * sixteen,
                                               color: textColor),
@@ -570,46 +571,53 @@ class _OwnersRegisterState extends State<OwnersRegister> {
                             alignment: Alignment.center,
                             child: Button(
                                 onTap: () async {
-                                  String pattern =
-                                      r"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])*$";
-                                  RegExp regex = RegExp(pattern);
-                                  if (regex.hasMatch(emailText.text)) {
-                                    FocusManager.instance.primaryFocus
-                                        ?.unfocus();
-                                    setState(() {
-                                      verifyEmailError = '';
-                                      error = '';
-                                      _loading = true;
-                                    });
-                                    var result =
-                                        await validateEmail(ownerEmail);
-
-                                    if (result == 'success') {
-                                      setState(() {
-                                        verifyEmailError = '';
-                                      });
-                                      var val = await registerOwner();
-                                      if (val == 'true') {
-                                        navigate();
-                                        serviceLocations.clear();
-                                      } else {
-                                        error = val.toString();
-                                      }
-                                    } else {
-                                      setState(() {
-                                        verifyEmailError = result.toString();
-                                      });
-                                      debugPrint('failed');
-                                    }
-                                    setState(() {
-                                      _loading = false;
-                                    });
+                                  // String pattern =
+                                  //     r"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])*$";
+                                  // RegExp regex = RegExp(pattern);
+                                  // if (regex.hasMatch(emailText.text)) {
+                                  //   FocusManager.instance.primaryFocus
+                                  //       ?.unfocus();
+                                  //   setState(() {
+                                  //     verifyEmailError = '';
+                                  //     error = '';
+                                  //     _loading = true;
+                                  //   });
+                                  //   var result =
+                                  //       await validateEmail(ownerEmail);
+                                  //
+                                  //   if (result == 'success') {
+                                  //     setState(() {
+                                  //       verifyEmailError = '';
+                                  //     });
+                                  //     var val = await registerOwner();
+                                  //     if (val == 'true') {
+                                  //       navigate();
+                                  //       serviceLocations.clear();
+                                  //     } else {
+                                  //       error = val.toString();
+                                  //     }
+                                  //   } else {
+                                  //     setState(() {
+                                  //       verifyEmailError = result.toString();
+                                  //     });
+                                  //     debugPrint('failed');
+                                  //   }
+                                  //   setState(() {
+                                  //     _loading = false;
+                                  //   });
+                                  // } else {
+                                  //   setState(() {
+                                  //     verifyEmailError =
+                                  //         languages[choosenLanguage]
+                                  //             ['text_email_validation'];
+                                  //   });
+                                  // }
+                                  var val = await registerOwner();
+                                  if (val == 'true') {
+                                    navigate();
+                                    serviceLocations.clear();
                                   } else {
-                                    setState(() {
-                                      verifyEmailError =
-                                          languages[choosenLanguage]
-                                              ['text_email_validation'];
-                                    });
+                                    error = val.toString();
                                   }
                                 },
                                 text: languages[choosenLanguage]['text_next']))
