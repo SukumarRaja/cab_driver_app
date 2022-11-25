@@ -34,11 +34,13 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:tagyourtaxi_driver/pages/vehicleInformations/vehicle_year.dart';
 import 'package:tagyourtaxi_driver/styles/styles.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../models/ride.dart';
 import '../pages/NavigatorPages/fleetdocuments.dart';
 import '../pages/login/ownerregister.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'auth_function.dart';
 import 'geohash.dart';
 
 //languages code
@@ -74,6 +76,7 @@ getDetailsOfDevice() async {
     });
     var token = await FirebaseMessaging.instance.getToken();
     fcm = token;
+    print("fcm token is $token");
     pref = await SharedPreferences.getInstance();
   } catch (e) {
     if (e is SocketException) {
@@ -391,9 +394,11 @@ phoneAuth(String phone) async {
 //get local bearer token
 
 getLocalData() async {
+  print("local data");
   dynamic result;
   bearerToken.clear;
   var connectivityResult = await (Connectivity().checkConnectivity());
+  var onBoarding = await checkOnBoarding();
   if (connectivityResult == ConnectivityResult.none) {
     internet = false;
   } else {
@@ -403,30 +408,40 @@ getLocalData() async {
     if (pref.containsKey('choosenLanguage')) {
       choosenLanguage = pref.getString('choosenLanguage');
       languageDirection = pref.getString('languageDirection');
-
       if (choosenLanguage.isNotEmpty) {
-        if (pref.containsKey('Bearer')) {
-          var tokens = pref.getString('Bearer');
-          if (tokens != null) {
-            bearerToken.add(BearerClass(type: 'Bearer', token: tokens));
-
-            var responce = await getUserDetails();
-            if (responce == true) {
-              result = '3';
-            } else if (responce == false) {
-              result = '2';
+        if (onBoarding == false) {
+          if (pref.containsKey('vehicle_id')) {
+            var tokens = pref.getString('vehicle_id');
+            print("token $tokens");
+            if (tokens != null) {
+              // var responce = await getUserDetails();
+              // if (responce == true) {
+              //   // result = '3';
+              //   result = "toekn";
+              // } else if (responce == false) {
+              //   // result = '2';
+              //   result = 'noToken';
+              // }
+              result = "token";
+            } else {
+              // result = '2';
+              result = 'noToken';
             }
           } else {
-            result = '2';
+            // result = '2';
+            result = 'noToken';
           }
         } else {
-          result = '2';
+          // result = '4';
+          result = 'onBoarding';
         }
       } else {
-        result = '1';
+        // result = '2';
+        result = 'noToken';
       }
     } else {
-      result = '1';
+      // result = '1';
+      result = "noLanguageChoose";
     }
   } catch (e) {
     if (e is SocketException) {
@@ -438,9 +453,6 @@ getLocalData() async {
 }
 
 //get service locations
-
-
-
 
 getServiceLocation() async {
   dynamic res;
@@ -465,8 +477,6 @@ getServiceLocation() async {
 }
 
 //get vehicle type
-
-
 
 getvehicleType() async {
   dynamic res;
@@ -493,8 +503,6 @@ getvehicleType() async {
 
 //get vehicle make
 
-
-
 getVehicleMake() async {
   dynamic res;
   try {
@@ -519,8 +527,7 @@ getVehicleMake() async {
 
 //get vehicle model
 dynamic selectedVechileMake;
-List vehicleModel =[];
-
+List vehicleModel = [];
 
 getVehicleModel() async {
   dynamic res;
@@ -547,6 +554,7 @@ getVehicleModel() async {
 //register driver
 
 List<BearerClass> bearerToken = <BearerClass>[];
+List<Datum> rideRes =[];
 
 registerDriver() async {
   bearerToken.clear();
@@ -1020,31 +1028,31 @@ bool isBackground = false;
 
 //user current state
 getUserDetails() async {
+  SharedPreferences preferences = await SharedPreferences.getInstance();
   dynamic result;
 
+  var sMobile = preferences.getString('mobile');
+  var vehicleId = preferences.getString('vehicle_id');
+  var rideParams = "&vehicle=${vehicleId ?? "1"}&status=accept";
   try {
-    var response = await http.get(
-      Uri.parse('${url}api/v1/user'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${bearerToken[0].token}'
-      },
-    );
-    if (response.statusCode == 200) {
-      printWrapped(response.body);
-      userDetails = jsonDecode(response.body)['data'];
+    var response = await repository.getNewRides(params: rideParams);
+    if (response.status == "200") {
+      printWrapped(response.status);
+      print("user details ${response.data}");
+      // userDetails = response['data'];
+      print("user details is $userDetails");
       if (userDetails['role'] != 'owner') {
-        if (userDetails['sos']['data'] != null) {
-          sosData = userDetails['sos']['data'];
-        }
+        // if (userDetails['sos']['data'] != null) {
+        //   sosData = userDetails['sos']['data'];
+        // }
+        print("jklhlkjhjkhkjh");
 
-        if (userDetails['onTripRequest'] != null) {
-          driverReq = userDetails['onTripRequest']['data'];
+        if (response.data != null || response.data!.isNotEmpty) {
+          // driverReq = userDetails['onTripRequest']['data'];
+          rideRes = response.data!;
 
-          if (driverReq['is_driver_arrived'] == 1 &&
-              driverReq['is_trip_start'] == 0 &&
-              arrivedTimer == null &&
-              driverReq['is_rental'] != true) {
+          if (response.data![0].isStart == "0" &&
+              arrivedTimer == null) {
             waitingBeforeStart();
           }
           if (driverReq['is_completed'] == 0 &&
@@ -1122,7 +1130,7 @@ getUserDetails() async {
       }
       result = true;
     } else {
-      debugPrint(response.body);
+      debugPrint(response.status);
       result = false;
     }
   } catch (e) {
@@ -1172,6 +1180,9 @@ ValueNotifying valueNotifierHome = ValueNotifying();
 ValueNotifying valueNotifiercheck = ValueNotifying();
 
 //driver online offline status
+
+
+
 driverStatus() async {
   dynamic result;
   try {
@@ -2364,7 +2375,7 @@ Map<String, dynamic> myHistoryPage = {};
 
 getHistory(id) async {
   dynamic result;
-print("completed");
+  print("completed");
   try {
     var response = await http.get(Uri.parse('${url}api/v1/request/history?$id'),
         headers: {'Authorization': 'Bearer ${bearerToken[0].token}'});
@@ -3309,10 +3320,12 @@ dynamic arrivedTimer;
 dynamic rideTimer;
 
 waitingBeforeStart() async {
+  print("jkhjklhlkjhjlkhjklhljkhkljhjkhjk");
   var bWaitingTimes = await FirebaseDatabase.instance
-      .ref('requests/${driverReq['id']}')
+      .ref('requests/${rideRes[0].tripId}')
       // .child('waiting_time_before_start')
       .get();
+
   var waitingTimes = await FirebaseDatabase.instance
       .ref('requests/${driverReq['id']}')
       // .child('total_waiting_time')

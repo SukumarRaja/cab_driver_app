@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tagyourtaxi_driver/pages/loadingPage/loading.dart';
 import 'package:tagyourtaxi_driver/pages/login/get_started.dart';
 import 'package:tagyourtaxi_driver/pages/login/login.dart';
@@ -82,6 +83,7 @@ class _OtpState extends State<Otp> {
           (route) => false);
     } else {
       if (ischeckownerordriver == 'driver') {
+        stroeMobile();
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => const GetStarted()));
       } else if (ischeckownerordriver == 'owner') {
@@ -89,6 +91,12 @@ class _OtpState extends State<Otp> {
             MaterialPageRoute(builder: (context) => const OwnersRegister()));
       }
     }
+  }
+
+  stroeMobile()async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setString("mobile", phnumber);
+    print("stored mobile is ${preferences.getString('mobile')}");
   }
 
 //otp is false

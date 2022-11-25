@@ -1,15 +1,19 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tagyourtaxi_driver/functions/functions.dart';
 import 'package:tagyourtaxi_driver/pages/loadingPage/loading.dart';
 import 'package:tagyourtaxi_driver/pages/noInternet/nointernet.dart';
 import 'package:tagyourtaxi_driver/styles/styles.dart';
 import 'package:tagyourtaxi_driver/translation/translation.dart';
+import 'package:tagyourtaxi_driver/widgets/common_toast.dart';
 import 'package:tagyourtaxi_driver/widgets/widgets.dart';
+import '../../functions/auth_function.dart';
 import '../onTripPage/map_page.dart';
 import '../vehicleInformations/referral_code.dart';
 import './login.dart';
@@ -89,9 +93,29 @@ class _GetStartedState extends State<GetStarted> {
   }
 
   //navigate
-  navigate() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const ServiceArea()));
+  navigate() async {
+    await verifyDriverPhone(phone: phnumber);
+    print("val is $verifyPhoneResult");
+    if (verifyPhoneResult == null) {
+      commonToast(msg: "Error");
+    } else {
+      navigateRef();
+      var body = {
+        "name": nameText.text,
+        "email": emailText.text,
+      };
+      storeLocalDevice(body: body);
+    }
+  }
+
+  storeLocalDevice({required Map body}) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    body.forEach((key, value) {
+      if (kDebugMode) {
+        debugPrint('index=$key, value=$value');
+      }
+      preferences.setString(key, value);
+    });
   }
 
   navigateMap() {
@@ -314,11 +338,10 @@ class _GetStartedState extends State<GetStarted> {
                           SizedBox(
                             height: media.height * 0.065,
                           ),
-                          (nameText.text.isNotEmpty &&
-                                  emailText.text.isNotEmpty
-                                  //&&  proImageFile1 != null
+                          (nameText.text.isNotEmpty && emailText.text.isNotEmpty
+                              //&&  proImageFile1 != null
 
-                          )
+                              )
                               ? Container(
                                   width: media.width * 1,
                                   alignment: Alignment.center,
@@ -359,8 +382,8 @@ class _GetStartedState extends State<GetStarted> {
                                         //   });
                                         // }
 
-                                        // navigate();
-                                        navigateRef();
+                                        navigate();
+                                        // navigateRef();
                                       },
                                       text: languages[choosenLanguage]
                                           ['text_next']))

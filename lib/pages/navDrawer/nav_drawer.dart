@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tagyourtaxi_driver/functions/functions.dart';
 import 'package:tagyourtaxi_driver/pages/NavigatorPages/about.dart';
 import 'package:tagyourtaxi_driver/pages/NavigatorPages/bankdetails.dart';
@@ -25,13 +26,22 @@ import '../NavigatorPages/managevehicles.dart';
 
 class NavDrawer extends StatefulWidget {
   const NavDrawer({Key? key}) : super(key: key);
+
   @override
   State<NavDrawer> createState() => _NavDrawerState();
 }
 
+dynamic pref;
+
 class _NavDrawerState extends State<NavDrawer> {
+  init() async {
+    SharedPreferences pre = await SharedPreferences.getInstance();
+    pref = pre;
+  }
+
   @override
   Widget build(BuildContext context) {
+    init();
     var media = MediaQuery.of(context).size;
     return Container(
       color: page,
@@ -65,8 +75,7 @@ class _NavDrawerState extends State<NavDrawer> {
                               image: DecorationImage(
                                   image: NetworkImage(
                                       // userDetails['profile_picture']
-                                      AppConfig.noImage
-                                          .toString()),
+                                      AppConfig.noImage.toString()),
                                   fit: BoxFit.cover)),
                         ),
                         SizedBox(
@@ -85,7 +94,7 @@ class _NavDrawerState extends State<NavDrawer> {
                                     width: media.width * 0.3,
                                     child: Text(
                                       // userDetails['name'],
-                                      'name',
+                                      pref.getString('name').toString() ?? "",
                                       style: GoogleFonts.roboto(
                                           fontSize: media.width * eighteen,
                                           color: textColor,
@@ -122,7 +131,7 @@ class _NavDrawerState extends State<NavDrawer> {
                               width: media.width * 0.45,
                               child: Text(
                                 // userDetails['email'],
-                                'email',
+                                pref.getString('email').toString(),
                                 style: GoogleFonts.roboto(
                                     fontSize: media.width * fourteen,
                                     color: textColor),

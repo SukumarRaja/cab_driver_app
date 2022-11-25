@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tagyourtaxi_driver/pages/loadingPage/loadingpage.dart';
 import 'package:tagyourtaxi_driver/styles/styles.dart';
 import 'package:tagyourtaxi_driver/translation/translation.dart';
 import '../../functions/functions.dart';
@@ -23,7 +24,7 @@ class _LanguagesState extends State<Languages> {
 
   navigate() {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const SignupMethod()));
+        context, MaterialPageRoute(builder: (context) => const LoadingPage()));
   }
 
   @override

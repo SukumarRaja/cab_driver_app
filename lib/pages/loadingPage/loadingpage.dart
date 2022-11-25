@@ -18,6 +18,7 @@ import '../../functions/functions.dart';
 import 'package:http/http.dart' as http;
 
 import '../login/signupmethod.dart';
+import '../on_boarding.dart';
 
 class LoadingPage extends StatefulWidget {
   const LoadingPage({Key? key}) : super(key: key);
@@ -37,24 +38,28 @@ class _LoadingPageState extends State<LoadingPage> {
 
   //navigate
   navigate() {
-    if (userDetails['uploaded_document'] == false) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Docs()));
-    } else if (userDetails['uploaded_document'] == true &&
-        userDetails['approve'] == false) {
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const DocsProcess(),
-          ));
-    } else if (userDetails['uploaded_document'] == true &&
-        userDetails['approve'] == true) {
-      //status approved
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const Maps()),
-          (route) => false);
-    }
+    // if (userDetails['uploaded_document'] == false) {
+    //   Navigator.pushReplacement(
+    //       context, MaterialPageRoute(builder: (context) => Docs()));
+    // } else if (userDetails['uploaded_document'] == true &&
+    //     userDetails['approve'] == false) {
+    //   Navigator.pushReplacement(
+    //       context,
+    //       MaterialPageRoute(
+    //         builder: (context) => const DocsProcess(),
+    //       ));
+    // } else if (userDetails['uploaded_document'] == true &&
+    //     userDetails['approve'] == true) {
+    //   //status approved
+    //   Navigator.pushAndRemoveUntil(
+    //       context,
+    //       MaterialPageRoute(builder: (context) => const Maps()),
+    //       (route) => false);
+    // }
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const Maps()),
+        (route) => false);
   }
 
   @override
@@ -75,11 +80,13 @@ class _LoadingPageState extends State<LoadingPage> {
       }
     });
     _package = await PackageInfo.fromPlatform();
+    print("package is ${_package.version}");
     if (platform == TargetPlatform.android) {
       _version = await FirebaseDatabase.instance
           .ref()
           .child('driver_android_version')
           .get();
+      print("version is ${_version.value}");
     } else {
       _version = await FirebaseDatabase.instance
           .ref()
@@ -121,22 +128,31 @@ class _LoadingPageState extends State<LoadingPage> {
       await getDetailsOfDevice();
       if (internet == true) {
         var val = await getLocalData();
+        getUserDetails();
 
         //if user is login and check waiting for approval status and send accordingly
-        if (val == '3') {
-          navigate();
-        }
-        //if user is not login in this device
-        else if (val == '2') {
+        if (val == 'noToken') {
           Future.delayed(const Duration(seconds: 2), () {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => const SignupMethod()));
           });
-        } else {
-          //user installing first time and didnt yet choosen language
+        } else if (val == "token") {
+          Future.delayed(const Duration(seconds: 2), () {
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => const Maps()));
+          });
+        } else if (val == "noLanguageChoose") {
           Future.delayed(const Duration(seconds: 2), () {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => const Languages()));
+          });
+        }
+        //if user is not login in this device
+        else {
+          //user installing first time and didnt yet choosen language
+          Future.delayed(const Duration(seconds: 2), () {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const OnBoarding()));
           });
         }
       } else {
@@ -151,28 +167,14 @@ class _LoadingPageState extends State<LoadingPage> {
 
     return Material(
       child: Scaffold(
+        backgroundColor: Colors.white,
         body: Stack(
           children: [
             Container(
               height: media.height * 1,
               width: media.width * 1,
-              decoration: BoxDecoration(
-                color: page,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(media.width * 0.01),
-                    width: media.width * 0.429,
-                    height: media.width * 0.429,
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage('assets/images/logo.png'),
-                            fit: BoxFit.contain)),
-                  ),
-                ],
-              ),
+              color: Colors.white,
+              child: const Loading(),
             ),
 
             //update available
