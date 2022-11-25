@@ -10,6 +10,8 @@ import 'package:tagyourtaxi_driver/pages/noInternet/nointernet.dart';
 import 'package:tagyourtaxi_driver/styles/styles.dart';
 import 'package:tagyourtaxi_driver/translation/translation.dart';
 import 'package:tagyourtaxi_driver/widgets/widgets.dart';
+import '../onTripPage/map_page.dart';
+import '../vehicleInformations/referral_code.dart';
 import './login.dart';
 import '../vehicleInformations/service_area.dart';
 
@@ -90,6 +92,20 @@ class _GetStartedState extends State<GetStarted> {
   navigate() {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => const ServiceArea()));
+  }
+
+  navigateMap() {
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const Maps()),
+        (route) => false);
+  }
+
+  navigateRef() {
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const Referral()),
+        (route) => false);
   }
 
   @override
@@ -299,8 +315,10 @@ class _GetStartedState extends State<GetStarted> {
                             height: media.height * 0.065,
                           ),
                           (nameText.text.isNotEmpty &&
-                                  emailText.text.isNotEmpty &&
-                                  proImageFile1 != null)
+                                  emailText.text.isNotEmpty
+                                  //&&  proImageFile1 != null
+
+                          )
                               ? Container(
                                   width: media.width * 1,
                                   alignment: Alignment.center,
@@ -341,7 +359,8 @@ class _GetStartedState extends State<GetStarted> {
                                         //   });
                                         // }
 
-                                        navigate();
+                                        // navigate();
+                                        navigateRef();
                                       },
                                       text: languages[choosenLanguage]
                                           ['text_next']))

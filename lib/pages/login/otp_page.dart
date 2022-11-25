@@ -56,24 +56,30 @@ class _OtpState extends State<Otp> {
 //navigate
   navigate(verify) {
     if (verify == true) {
-      if (userDetails['uploaded_document'] == false) {
-        Navigator.pushAndRemoveUntil(context,
-            MaterialPageRoute(builder: (context) => Docs()), (route) => false);
-      } else if (userDetails['uploaded_document'] == true &&
-          userDetails['approve'] == false) {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const DocsProcess(),
-            ),
-            (route) => false);
-      } else if (userDetails['uploaded_document'] == true &&
-          userDetails['approve'] == true) {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const Maps()),
-            (route) => false);
-      }
+      // if (userDetails['uploaded_document'] == false) {
+      //   Navigator.pushAndRemoveUntil(context,
+      //       MaterialPageRoute(builder: (context) => Docs()), (route) => false);
+      // }
+      // else if (userDetails['uploaded_document'] == true &&
+      //     userDetails['approve'] == false) {
+      //   Navigator.pushAndRemoveUntil(
+      //       context,
+      //       MaterialPageRoute(
+      //         builder: (context) => const DocsProcess(),
+      //       ),
+      //       (route) => false);
+      // }
+      // else if (userDetails['uploaded_document'] == true &&
+      //     userDetails['approve'] == true) {
+      //   Navigator.pushAndRemoveUntil(
+      //       context,
+      //       MaterialPageRoute(builder: (context) => const Maps()),
+      //       (route) => false);
+      // }
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const Maps()),
+          (route) => false);
     } else {
       if (ischeckownerordriver == 'driver') {
         Navigator.pushReplacement(context,

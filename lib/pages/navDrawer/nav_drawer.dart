@@ -19,6 +19,7 @@ import 'package:tagyourtaxi_driver/pages/vehicleInformations/upload_docs.dart';
 import 'package:tagyourtaxi_driver/styles/styles.dart';
 import 'package:tagyourtaxi_driver/translation/translation.dart';
 
+import '../../config/app-config.dart';
 import '../NavigatorPages/fleetdetails.dart';
 import '../NavigatorPages/managevehicles.dart';
 
@@ -63,7 +64,8 @@ class _NavDrawerState extends State<NavDrawer> {
                               color: Colors.grey,
                               image: DecorationImage(
                                   image: NetworkImage(
-                                      userDetails['profile_picture']
+                                      // userDetails['profile_picture']
+                                      AppConfig.noImage
                                           .toString()),
                                   fit: BoxFit.cover)),
                         ),
@@ -82,7 +84,8 @@ class _NavDrawerState extends State<NavDrawer> {
                                   SizedBox(
                                     width: media.width * 0.3,
                                     child: Text(
-                                      userDetails['name'],
+                                      // userDetails['name'],
+                                      'name',
                                       style: GoogleFonts.roboto(
                                           fontSize: media.width * eighteen,
                                           color: textColor,
@@ -118,7 +121,8 @@ class _NavDrawerState extends State<NavDrawer> {
                             SizedBox(
                               width: media.width * 0.45,
                               child: Text(
-                                userDetails['email'],
+                                // userDetails['email'],
+                                'email',
                                 style: GoogleFonts.roboto(
                                     fontSize: media.width * fourteen,
                                     color: textColor),

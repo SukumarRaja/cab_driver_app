@@ -2364,7 +2364,7 @@ Map<String, dynamic> myHistoryPage = {};
 
 getHistory(id) async {
   dynamic result;
-
+print("completed");
   try {
     var response = await http.get(Uri.parse('${url}api/v1/request/history?$id'),
         headers: {'Authorization': 'Bearer ${bearerToken[0].token}'});

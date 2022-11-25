@@ -8,6 +8,8 @@ import 'package:tagyourtaxi_driver/styles/styles.dart';
 import 'package:tagyourtaxi_driver/translation/translation.dart';
 import 'package:tagyourtaxi_driver/widgets/widgets.dart';
 
+import '../onTripPage/map_page.dart';
+
 class Referral extends StatefulWidget {
   const Referral({Key? key}) : super(key: key);
 
@@ -25,6 +27,12 @@ class _ReferralState extends State<Referral> {
   navigate() {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => Docs()));
+  }
+  navigateMap() {
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const Maps()),
+            (route) => false);
   }
 
   @override
@@ -104,10 +112,11 @@ class _ReferralState extends State<Referral> {
                             FocusManager.instance.primaryFocus?.unfocus();
                             _error = '';
 
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Docs()));
+                            // Navigator.pushReplacement(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => Docs()));
+                            navigateMap();
                           },
                           text: languages[choosenLanguage]['text_skip']),
                       //apply button
@@ -121,7 +130,7 @@ class _ReferralState extends State<Referral> {
                             });
                             var result = await updateReferral();
                             if (result == 'true') {
-                              navigate();
+                              navigateMap();
                             } else {
                               setState(() {
                                 _error = languages[choosenLanguage]
