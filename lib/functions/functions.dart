@@ -554,7 +554,7 @@ getVehicleModel() async {
 //register driver
 
 List<BearerClass> bearerToken = <BearerClass>[];
-List<Datum> rideRes =[];
+List<Datum> rideRes = [];
 
 registerDriver() async {
   bearerToken.clear();
@@ -1051,25 +1051,30 @@ getUserDetails() async {
           // driverReq = userDetails['onTripRequest']['data'];
           rideRes = response.data!;
 
-          if (response.data![0].isStart == "0" &&
-              arrivedTimer == null) {
+          if (response.data![0].isStart == "0" && arrivedTimer == null) {
             waitingBeforeStart();
           }
-          if (driverReq['is_completed'] == 0 &&
-              driverReq['is_trip_start'] == 1 &&
-              rideTimer == null &&
-              driverReq['is_rental'] != true) {
+          if (
+              // driverReq['is_completed'] == 0 &&
+              rideRes[0].isAccept == "1"
+              // && driverReq['is_trip_start'] == 1 &&
+              // rideTimer == null
+              // && driverReq['is_rental'] != true
+              ) {
             waitingAfterStart();
           }
 
-          if (driverReq['accepted_at'] != null) {
+          // if (driverReq['accepted_at'] != null) {
+          if (rideRes[0].startTime != null || rideRes[0].startTime != "") {
             getCurrentMessages();
           }
           valueNotifierHome.incrementNotifier();
-        } else if (userDetails['metaRequest'] != null) {
+        }
+        // else if (userDetails['metaRequest'] != null) {
+        else if (rideRes[0].tripId != null) {
           driverReject = false;
           userReject = false;
-          driverReq = userDetails['metaRequest']['data'];
+          // driverReq = userDetails['metaRequest']['data'];
 
           if (duration == 0 || duration == 0.0) {
             if (isBackground == true && platform == TargetPlatform.android) {
@@ -1080,7 +1085,7 @@ getUserDetails() async {
                       id: 7425,
                       channelKey: 'trip_request',
                       title: 'Pick Address',
-                      body: driverReq['pick_address'],
+                      body: rideRes[0].pickupLocation,
                       autoDismissible: false,
                       displayOnBackground: true,
                       displayOnForeground: false,
@@ -1105,9 +1110,10 @@ getUserDetails() async {
                         showInCompactView: true),
                   ]);
             }
-            duration = double.parse(
-                userDetails['trip_accept_reject_duration_for_driver']
-                    .toString());
+            // duration = double.parse(
+            //     userDetails['trip_accept_reject_duration_for_driver']
+            //         .toString());
+            duration = double.parse("3");
             sound();
           }
 
@@ -1122,7 +1128,8 @@ getUserDetails() async {
           valueNotifierHome.incrementNotifier();
         }
 
-        if (userDetails['active'] == false) {
+        // if (userDetails['active'] == false) {
+        if (rideRes[0].isStart != "") {
           isActive = 'false';
         } else {
           isActive = 'true';
@@ -1180,8 +1187,6 @@ ValueNotifying valueNotifierHome = ValueNotifying();
 ValueNotifying valueNotifiercheck = ValueNotifying();
 
 //driver online offline status
-
-
 
 driverStatus() async {
   dynamic result;
@@ -3327,7 +3332,7 @@ waitingBeforeStart() async {
       .get();
 
   var waitingTimes = await FirebaseDatabase.instance
-      .ref('requests/${driverReq['id']}')
+      .ref('requests/${rideRes[0].tripId}')
       // .child('total_waiting_time')
       .get();
   if (bWaitingTimes.child('waiting_time_before_start').value != null) {
@@ -3343,14 +3348,15 @@ waitingBeforeStart() async {
   await Future.delayed(const Duration(seconds: 10), () {});
 
   arrivedTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-    if (driverReq['is_driver_arrived'] == 1 &&
-        driverReq['is_trip_start'] == 0) {
+    if (
+        // driverReq['is_driver_arrived'] == 1 &&
+        rideRes[0].isStart == "0") {
       waitingBeforeTime++;
       waitingTime++;
       if (waitingTime % 60 == 0) {
         FirebaseDatabase.instance
             .ref()
-            .child('requests/${driverReq['id']}')
+            .child('requests/${rideRes[0].tripId}')
             .update({
           'waiting_time_before_start': waitingBeforeTime,
           'total_waiting_time': waitingTime
@@ -3370,15 +3376,15 @@ dynamic startTimer;
 
 waitingAfterStart() async {
   var bWaitingTimes = await FirebaseDatabase.instance
-      .ref('requests/${driverReq['id']}')
+      .ref('requests/${rideRes[0].tripId}')
       // .child('waiting_time_before_start')
       .get();
   var waitingTimes = await FirebaseDatabase.instance
-      .ref('requests/${driverReq['id']}')
+      .ref('requests/${rideRes[0].tripId}')
       // .child('total_waiting_time')
       .get();
   var aWaitingTimes = await FirebaseDatabase.instance
-      .ref('requests/${driverReq['id']}')
+      .ref('requests/${rideRes[0].tripId}')
       // .child('waiting_time_after_start')
       .get();
   if (bWaitingTimes.child('waiting_time_before_start').value != null &&
@@ -3399,12 +3405,14 @@ waitingAfterStart() async {
   await Future.delayed(const Duration(seconds: 10), () {});
   rideTimer = Timer.periodic(const Duration(seconds: 60), (timer) async {
     if (currentRidePosition == null &&
-        driverReq['is_completed'] == 0 &&
-        driverReq['is_trip_start'] == 1) {
+        // driverReq['is_completed'] == 0 &&
+        // driverReq['is_trip_start'] == 1
+        rideRes[0].isStart == "0") {
       currentRidePosition = center;
     } else if (currentRidePosition != null &&
-        driverReq['is_completed'] == 0 &&
-        driverReq['is_trip_start'] == 1) {
+        // driverReq['is_completed'] == 0 &&
+        // driverReq['is_trip_start'] == 1
+        rideRes[0].isStart == "0") {
       var dist = await calculateIdleDistance(currentRidePosition.latitude,
           currentRidePosition.longitude, center.latitude, center.longitude);
       if (dist < 150) {
@@ -3413,7 +3421,7 @@ waitingAfterStart() async {
         if (waitingTime % 60 == 0) {
           FirebaseDatabase.instance
               .ref()
-              .child('requests/${driverReq['id']}')
+              .child('requests/${rideRes[0].tripId}')
               .update({
             'waiting_time_after_start': waitingAfterTime,
             'total_waiting_time': waitingTime
